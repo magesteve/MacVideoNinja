@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import AVFoundation
 import AVKit
 
 class ViewController: NSViewController, NSTabViewDelegate {
@@ -32,6 +33,7 @@ class ViewController: NSViewController, NSTabViewDelegate {
     var secondAsset: AVAsset?
     var audioAsset: AVAsset?
     var calculating = false
+    var videoSize: CGSize = CGSize(width: 640, height: 480)
 
     // MARK: Private Functions
     
@@ -84,22 +86,67 @@ class ViewController: NSViewController, NSTabViewDelegate {
             closure(url)
         })
     }
+    
+    enum ImageOrientation {
+        case up
+        case down
+        case left
+        case right
+    }
 
+    private func orientationFromTransform(_ transform: CGAffineTransform) -> (orientation: ImageOrientation, isPortrait: Bool) {
+      var assetOrientation = ImageOrientation.up
+      var isPortrait = false
+      let tfA = transform.a
+      let tfB = transform.b
+      let tfC = transform.c
+      let tfD = transform.d
+
+      if tfA == 0 && tfB == 1.0 && tfC == -1.0 && tfD == 0 {
+        assetOrientation = .right
+        isPortrait = true
+      } else if tfA == 0 && tfB == -1.0 && tfC == 1.0 && tfD == 0 {
+        assetOrientation = .left
+        isPortrait = true
+      } else if tfA == 1.0 && tfB == 0 && tfC == 0 && tfD == 1.0 {
+        assetOrientation = .up
+      } else if tfA == -1.0 && tfB == 0 && tfC == 0 && tfD == -1.0 {
+        assetOrientation = .down
+      }
+      return (assetOrientation, isPortrait)
+    }
+    
     private func videoCompositionInstruction(_ track: AVCompositionTrack, asset: AVAsset) -> AVMutableVideoCompositionLayerInstruction {
         let instruction = AVMutableVideoCompositionLayerInstruction(assetTrack: track)
         let assetTrack = asset.tracks(withMediaType: AVMediaType.video)[0]
 
-        let scaleToFitRatio = 640 / assetTrack.naturalSize.width
+        let transform = assetTrack.preferredTransform
+        let assetInfo = orientationFromTransform(transform)
 
-        let scaleFactor = CGAffineTransform(scaleX: scaleToFitRatio, y: scaleToFitRatio)
-        let concat = assetTrack.preferredTransform.concatenating(scaleFactor).concatenating(CGAffineTransform(translationX: 0, y: 640 / 2))
-        instruction.setTransform(concat, at: .zero)
+        var scaleToFitRatio = videoSize.width / assetTrack.naturalSize.width
+        if assetInfo.isPortrait {
+            scaleToFitRatio = videoSize.width / assetTrack.naturalSize.height
+            let scaleFactor = CGAffineTransform(scaleX: scaleToFitRatio, y: scaleToFitRatio)
+            instruction.setTransform(assetTrack.preferredTransform.concatenating(scaleFactor), at: .zero)
+        } else {
+            let scaleFactor = CGAffineTransform(scaleX: scaleToFitRatio, y: scaleToFitRatio)
+            var concat = assetTrack.preferredTransform.concatenating(scaleFactor)
+            if assetInfo.orientation == .down {
+                let fixUpsideDown = CGAffineTransform(rotationAngle: CGFloat(Double.pi))
+                let windowBounds = videoSize
+                let yFix = assetTrack.naturalSize.height + windowBounds.height
+                let centerFix = CGAffineTransform(translationX: assetTrack.naturalSize.width, y: yFix)
+                concat = fixUpsideDown.concatenating(centerFix).concatenating(scaleFactor)
+            }
+            instruction.setTransform(concat, at: .zero)
+        }
 
         return instruction
     }
 
     private func exportDidFinish(_ session: AVAssetExportSession) {
-      // Cleanup assets
+        // Cleanup assets
+        
         firstAsset = nil
         secondAsset = nil
         audioAsset = nil
@@ -120,33 +167,19 @@ class ViewController: NSViewController, NSTabViewDelegate {
         let mixComposition = AVMutableComposition()
 
         // 2 - Create two video tracks
-        guard
-          let firstTrack = mixComposition.addMutableTrack(
-            withMediaType: .video,
-            preferredTrackID: Int32(kCMPersistentTrackID_Invalid))
-          else { return }
+        guard let firstTrack = mixComposition.addMutableTrack(withMediaType: .video, preferredTrackID: Int32(kCMPersistentTrackID_Invalid)) else { return }
 
         do {
-          try firstTrack.insertTimeRange(
-            CMTimeRangeMake(start: .zero, duration: firstAsset.duration),
-            of: firstAsset.tracks(withMediaType: .video)[0],
-            at: .zero)
+          try firstTrack.insertTimeRange(CMTimeRangeMake(start: .zero, duration: firstAsset.duration), of: firstAsset.tracks(withMediaType: .video)[0], at: .zero)
         } catch {
           print("Failed to load first track")
           return
         }
 
-        guard
-          let secondTrack = mixComposition.addMutableTrack(
-            withMediaType: .video,
-            preferredTrackID: Int32(kCMPersistentTrackID_Invalid))
-          else { return }
+        guard let secondTrack = mixComposition.addMutableTrack(withMediaType: .video, preferredTrackID: Int32(kCMPersistentTrackID_Invalid)) else { return }
 
         do {
-          try secondTrack.insertTimeRange(
-            CMTimeRangeMake(start: .zero, duration: secondAsset.duration),
-            of: secondAsset.tracks(withMediaType: .video)[0],
-            at: firstAsset.duration)
+          try secondTrack.insertTimeRange(CMTimeRangeMake(start: .zero, duration: secondAsset.duration), of: secondAsset.tracks(withMediaType: .video)[0], at: firstAsset.duration)
         } catch {
           print("Failed to load second track")
           return
@@ -154,9 +187,7 @@ class ViewController: NSViewController, NSTabViewDelegate {
 
         // 3 - Composition Instructions
         let mainInstruction = AVMutableVideoCompositionInstruction()
-        mainInstruction.timeRange = CMTimeRangeMake(
-          start: .zero,
-          duration: CMTimeAdd(firstAsset.duration, secondAsset.duration))
+        mainInstruction.timeRange = CMTimeRangeMake(start: .zero, duration: CMTimeAdd(firstAsset.duration, secondAsset.duration))
 
         // 4 - Set up the instructions — one for each asset
         let firstInstruction = videoCompositionInstruction(firstTrack, asset: firstAsset)
@@ -168,39 +199,26 @@ class ViewController: NSViewController, NSTabViewDelegate {
         let mainComposition = AVMutableVideoComposition()
         mainComposition.instructions = [mainInstruction]
         mainComposition.frameDuration = CMTimeMake(value: 1, timescale: 30)
-        mainComposition.renderSize = CGSize(
-          width: 640,
-          height: 480)
+        mainComposition.renderSize = CGSize(width: videoSize.width, height: videoSize.height)
 
         // 6 - Audio track
         if let loadedAudioAsset = audioAsset {
-          let audioTrack = mixComposition.addMutableTrack(
-            withMediaType: .audio,
-            preferredTrackID: 0)
+          let audioTrack = mixComposition.addMutableTrack(withMediaType: .audio, preferredTrackID: 0)
           do {
-            try audioTrack?.insertTimeRange(
-              CMTimeRangeMake(
-                start: CMTime.zero,
-                duration: CMTimeAdd(
-                  firstAsset.duration,
-                  secondAsset.duration)),
-              of: loadedAudioAsset.tracks(withMediaType: .audio)[0],
-              at: .zero)
+            try audioTrack?.insertTimeRange(CMTimeRangeMake(start: CMTime.zero, duration: CMTimeAdd( firstAsset.duration, secondAsset.duration)), of: loadedAudioAsset.tracks(withMediaType: .audio)[0], at: .zero)
           } catch {
             print("Failed to load Audio track")
           }
         }
 
         // 7 - Create Exporter
-        guard let exporter = AVAssetExportSession(
-          asset: mixComposition,
-          presetName: AVAssetExportPresetHighestQuality)
-          else { return }
+        guard let exporter = AVAssetExportSession(asset: mixComposition, presetName: AVAssetExportPresetHighestQuality) else { return }
         exporter.outputURL = url
         exporter.outputFileType = AVFileType.mov
         exporter.shouldOptimizeForNetworkUse = true
         exporter.videoComposition = mainComposition
 
+        calculating = true
         updateUI()
 
         // 8 - Perform the Export
@@ -232,8 +250,8 @@ class ViewController: NSViewController, NSTabViewDelegate {
             spinnerView.startAnimation(nil)
         }
         else {
-            spinnerView.stopAnimation(nil)
             spinnerView.isHidden = true
+            spinnerView.stopAnimation(nil)
         }
     }
     
@@ -263,8 +281,14 @@ class ViewController: NSViewController, NSTabViewDelegate {
             
             // Save reference to asset 1
             
-            strongSelf.firstAsset = AVAsset(url: url)
+            let asset = AVAsset(url: url)
+            strongSelf.firstAsset = asset
             strongSelf.asset1Label.stringValue = url.lastPathComponent
+            
+            let tracks = asset.tracks(withMediaType: .video)
+            if let track = tracks.first {
+                strongSelf.videoSize = track.naturalSize
+            }
         }
 
     }
@@ -302,6 +326,7 @@ class ViewController: NSViewController, NSTabViewDelegate {
     @IBAction func mergeAction(_ sender: Any) {
         
         // Invoke Save Panel, to find location to save
+        
         saveMedia() { [weak self] url in
             guard let strongSelf = self else { return }
 
