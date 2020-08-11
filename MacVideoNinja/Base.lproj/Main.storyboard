@@ -1,7 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="11134" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11134"/>
+        <plugIn identifier="com.apple.AVKitIBPlugin" version="16097.2"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097.2"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Application-->
@@ -673,11 +675,11 @@
                         <outlet property="delegate" destination="Voe-Tx-rLC" id="PrD-fu-P6m"/>
                     </connections>
                 </application>
-                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModuleProvider="target"/>
+                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="MacVideoNinja" customModuleProvider="target"/>
                 <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="75" y="0.0"/>
+            <point key="canvasLocation" x="-2" y="-272"/>
         </scene>
         <!--Window Controller-->
         <scene sceneID="R2V-B0-nI4">
@@ -686,7 +688,7 @@
                     <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-                        <rect key="contentRect" x="196" y="240" width="480" height="270"/>
+                        <rect key="contentRect" x="196" y="240" width="600" height="400"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
                         <connections>
                             <outlet property="delegate" destination="B8D-0N-5wS" id="98r-iN-zZc"/>
@@ -698,20 +700,186 @@
                 </windowController>
                 <customObject id="Oky-zY-oP4" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="75" y="250"/>
+            <point key="canvasLocation" x="62" y="53"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="hIz-AP-VOD">
             <objects>
-                <viewController id="XfG-lQ-9wD" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="XfG-lQ-9wD" customClass="ViewController" customModule="MacVideoNinja" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="m2S-Jp-Qdl">
-                        <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="400"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <tabView translatesAutoresizingMaskIntoConstraints="NO" id="J7B-aH-wU9">
+                                <rect key="frame" x="13" y="2" width="574" height="384"/>
+                                <font key="font" metaFont="system"/>
+                                <tabViewItems>
+                                    <tabViewItem label="Select and Play Video" identifier="" id="sXc-Cr-zDe">
+                                        <view key="view" id="FOw-A1-I78">
+                                            <rect key="frame" x="10" y="33" width="554" height="338"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <subviews>
+                                                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zc7-lC-aSe">
+                                                    <rect key="frame" x="225" y="307" width="104" height="32"/>
+                                                    <buttonCell key="cell" type="push" title="Play Video" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="rzh-I5-sah">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="playVideoAction:" target="XfG-lQ-9wD" id="ePs-aX-Zoh"/>
+                                                    </connections>
+                                                </button>
+                                                <avPlayerView controlsStyle="inline" translatesAutoresizingMaskIntoConstraints="NO" id="f6s-m7-jG5">
+                                                    <rect key="frame" x="17" y="17" width="520" height="277"/>
+                                                </avPlayerView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="zc7-lC-aSe" firstAttribute="top" secondItem="FOw-A1-I78" secondAttribute="top" constant="3" id="7JW-Bd-nag"/>
+                                                <constraint firstAttribute="trailing" secondItem="f6s-m7-jG5" secondAttribute="trailing" constant="17" id="L4U-L1-FKV"/>
+                                                <constraint firstItem="f6s-m7-jG5" firstAttribute="leading" secondItem="FOw-A1-I78" secondAttribute="leading" constant="17" id="PsA-Tp-yuV"/>
+                                                <constraint firstItem="zc7-lC-aSe" firstAttribute="centerX" secondItem="FOw-A1-I78" secondAttribute="centerX" id="SUj-00-ltK"/>
+                                                <constraint firstAttribute="bottom" secondItem="f6s-m7-jG5" secondAttribute="bottom" constant="17" id="fOC-zq-5Cd"/>
+                                                <constraint firstItem="f6s-m7-jG5" firstAttribute="top" secondItem="zc7-lC-aSe" secondAttribute="bottom" constant="20" id="w1T-aR-qD5"/>
+                                            </constraints>
+                                        </view>
+                                    </tabViewItem>
+                                    <tabViewItem label="Record and Save Video" identifier="" id="qJk-pa-ae7">
+                                        <view key="view" id="bil-IB-3zr">
+                                            <rect key="frame" x="10" y="33" width="434" height="208"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        </view>
+                                    </tabViewItem>
+                                    <tabViewItem label="Merge Video" identifier="" id="qL7-8C-9j5">
+                                        <view key="view" id="9UM-vK-qVo">
+                                            <rect key="frame" x="10" y="33" width="554" height="338"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <subviews>
+                                                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rF8-Ue-abg">
+                                                    <rect key="frame" x="206" y="307" width="142" height="32"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="130" id="J6I-BZ-GKr"/>
+                                                    </constraints>
+                                                    <buttonCell key="cell" type="push" title="Load Asset 1" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="GTR-eA-eq8">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="loadAsset1Action:" target="XfG-lQ-9wD" id="Z41-M8-LZj"/>
+                                                    </connections>
+                                                </button>
+                                                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jA8-Ct-P8T">
+                                                    <rect key="frame" x="206" y="254" width="142" height="32"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="130" id="Oh5-9H-Esq"/>
+                                                    </constraints>
+                                                    <buttonCell key="cell" type="push" title="Load Asset 2" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="DPu-2Z-bI8">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="loadAsset2Action:" target="XfG-lQ-9wD" id="fVq-A0-ia7"/>
+                                                    </connections>
+                                                </button>
+                                                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6cf-VU-7Sh">
+                                                    <rect key="frame" x="206" y="201" width="142" height="32"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="130" id="EaH-13-R7R"/>
+                                                    </constraints>
+                                                    <buttonCell key="cell" type="push" title="Load Audio" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="lbl-5p-ldM">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="loadAudioAction:" target="XfG-lQ-9wD" id="t65-6y-mOK"/>
+                                                    </connections>
+                                                </button>
+                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aTv-6Q-CB0">
+                                                    <rect key="frame" x="246" y="290" width="63" height="16"/>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Unloaded" id="uYk-dZ-dkm">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vUh-TJ-37t">
+                                                    <rect key="frame" x="246" y="237" width="63" height="16"/>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Unloaded" id="ZqS-aV-1zj">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eJx-eV-F6n">
+                                                    <rect key="frame" x="246" y="184" width="63" height="16"/>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Unloaded" id="4Cq-LR-ZCI">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <progressIndicator wantsLayer="YES" maxValue="100" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="KiW-Az-iIJ">
+                                                    <rect key="frame" x="269" y="119" width="16" height="16"/>
+                                                </progressIndicator>
+                                                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ZPC-51-p7W">
+                                                    <rect key="frame" x="206" y="148" width="142" height="32"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="130" id="9Qw-Y2-oKL"/>
+                                                    </constraints>
+                                                    <buttonCell key="cell" type="push" title="Merge and Save" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="CxW-Ai-08b">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="mergeAction:" target="XfG-lQ-9wD" id="j6Z-KP-PB6"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="ZPC-51-p7W" firstAttribute="top" secondItem="eJx-eV-F6n" secondAttribute="bottom" constant="8" id="1Ld-oo-koH"/>
+                                                <constraint firstItem="6cf-VU-7Sh" firstAttribute="centerX" secondItem="9UM-vK-qVo" secondAttribute="centerX" id="2RS-wk-keR"/>
+                                                <constraint firstItem="ZPC-51-p7W" firstAttribute="centerX" secondItem="9UM-vK-qVo" secondAttribute="centerX" id="4M4-fo-KTS"/>
+                                                <constraint firstItem="KiW-Az-iIJ" firstAttribute="top" secondItem="ZPC-51-p7W" secondAttribute="bottom" constant="20" id="6QZ-UX-Rzl"/>
+                                                <constraint firstItem="rF8-Ue-abg" firstAttribute="top" secondItem="9UM-vK-qVo" secondAttribute="top" constant="3" id="6nY-s3-YQF"/>
+                                                <constraint firstItem="eJx-eV-F6n" firstAttribute="centerX" secondItem="9UM-vK-qVo" secondAttribute="centerX" id="BlG-Pg-khD"/>
+                                                <constraint firstItem="vUh-TJ-37t" firstAttribute="centerX" secondItem="9UM-vK-qVo" secondAttribute="centerX" id="Gm7-g2-Ne3"/>
+                                                <constraint firstItem="rF8-Ue-abg" firstAttribute="centerX" secondItem="9UM-vK-qVo" secondAttribute="centerX" id="KTA-4J-iZR"/>
+                                                <constraint firstItem="KiW-Az-iIJ" firstAttribute="centerX" secondItem="9UM-vK-qVo" secondAttribute="centerX" id="Kly-aX-tbN"/>
+                                                <constraint firstItem="jA8-Ct-P8T" firstAttribute="centerX" secondItem="9UM-vK-qVo" secondAttribute="centerX" id="Kmo-zf-toP"/>
+                                                <constraint firstItem="eJx-eV-F6n" firstAttribute="top" secondItem="6cf-VU-7Sh" secondAttribute="bottom" constant="8" id="Wyb-LL-2J2"/>
+                                                <constraint firstItem="aTv-6Q-CB0" firstAttribute="centerX" secondItem="9UM-vK-qVo" secondAttribute="centerX" id="a2Z-63-d1t"/>
+                                                <constraint firstItem="vUh-TJ-37t" firstAttribute="top" secondItem="jA8-Ct-P8T" secondAttribute="bottom" constant="8" id="aRC-eW-Tjc"/>
+                                                <constraint firstItem="jA8-Ct-P8T" firstAttribute="top" secondItem="aTv-6Q-CB0" secondAttribute="bottom" constant="8" id="oRP-gR-gkY"/>
+                                                <constraint firstItem="aTv-6Q-CB0" firstAttribute="top" secondItem="rF8-Ue-abg" secondAttribute="bottom" constant="8" id="sDl-CR-Qht"/>
+                                                <constraint firstItem="6cf-VU-7Sh" firstAttribute="top" secondItem="vUh-TJ-37t" secondAttribute="bottom" constant="8" id="uFP-QB-jya"/>
+                                            </constraints>
+                                        </view>
+                                    </tabViewItem>
+                                </tabViewItems>
+                            </tabView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="J7B-aH-wU9" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="20" id="AA8-0F-gvb"/>
+                            <constraint firstAttribute="trailing" secondItem="J7B-aH-wU9" secondAttribute="trailing" constant="20" id="Mb3-SN-Ccb"/>
+                            <constraint firstItem="J7B-aH-wU9" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="20" id="Pwt-Vx-MMF"/>
+                            <constraint firstAttribute="bottom" secondItem="J7B-aH-wU9" secondAttribute="bottom" constant="12" id="oNG-ZO-8Ib"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="assert1Button" destination="rF8-Ue-abg" id="ViW-IK-e70"/>
+                        <outlet property="assert2Button" destination="jA8-Ct-P8T" id="tnd-5C-l6B"/>
+                        <outlet property="asset1Label" destination="aTv-6Q-CB0" id="Cxb-0F-1tU"/>
+                        <outlet property="asset2Label" destination="vUh-TJ-37t" id="xHK-ii-hea"/>
+                        <outlet property="audioButton" destination="6cf-VU-7Sh" id="2yD-3Q-1jL"/>
+                        <outlet property="audioLabel" destination="eJx-eV-F6n" id="r54-yY-R4G"/>
+                        <outlet property="mainTabView" destination="J7B-aH-wU9" id="iSN-Dk-ad6"/>
+                        <outlet property="mergeButton" destination="ZPC-51-p7W" id="RE8-NC-tyb"/>
+                        <outlet property="playerView" destination="f6s-m7-jG5" id="aEu-cZ-Kdr"/>
+                        <outlet property="spinnerView" destination="KiW-Az-iIJ" id="fka-90-iJp"/>
+                    </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="75" y="655"/>
+            <point key="canvasLocation" x="62" y="668"/>
         </scene>
     </scenes>
 </document>
