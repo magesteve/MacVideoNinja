@@ -16,6 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		41C1161824E598F200B977FC /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		41EDF27B24E1C7C600FFB199 /* MacVideoNinja.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacVideoNinja.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		41EDF27E24E1C7C600FFB199 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		41EDF28024E1C7C600FFB199 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -43,6 +44,7 @@
 		41EDF27224E1C7C600FFB199 = {
 			isa = PBXGroup;
 			children = (
+				41C1161824E598F200B977FC /* README.md */,
 				41EDF27D24E1C7C600FFB199 /* MacVideoNinja */,
 				41EDF27C24E1C7C600FFB199 /* Products */,
 				41EDF29224E32E0800FFB199 /* Frameworks */,
