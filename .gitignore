@@ -1,0 +1,10 @@
+.DS_Store
+/.build
+/Packages
+/*.xcodeproj
+xcuserdata/
+Package.resolved
+Package.pins
+.swiftpm
+
+

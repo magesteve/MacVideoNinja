@@ -369,7 +369,7 @@
                                     <action selector="recordAction:" target="7R7-Bl-AkP" id="Z74-Kx-pyo"/>
                                 </connections>
                             </button>
-                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="3eq-wk-6av">
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="3eq-wk-6av" customClass="AVCaptureView">
                                 <rect key="frame" x="20" y="20" width="560" height="319"/>
                             </customView>
                         </subviews>
@@ -383,8 +383,8 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="captureView" destination="3eq-wk-6av" id="jYY-9g-7dl"/>
                         <outlet property="recordButton" destination="dhf-aN-fmI" id="bS7-U8-FSv"/>
-                        <outlet property="recordingView" destination="3eq-wk-6av" id="cRn-Ye-omS"/>
                     </connections>
                 </viewController>
                 <customObject id="anp-M9-FmB" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

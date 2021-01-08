@@ -3,10 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		418B942C24E880090014101E /* AVCaptureView in Frameworks */ = {isa = PBXBuildFile; productRef = 418B942B24E880090014101E /* AVCaptureView */; };
 		41C1161A24E59BD800B977FC /* RecordVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41C1161924E59BD800B977FC /* RecordVideoViewController.swift */; };
 		41C1161D24E59BF000B977FC /* MergeVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41C1161B24E59BF000B977FC /* MergeVideoViewController.swift */; };
 		41C1162124E59DC500B977FC /* VideoHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41C1161F24E59DC500B977FC /* VideoHelper.swift */; };
@@ -40,6 +41,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				41EDF29624E32E2B00FFB199 /* AVKit.framework in Frameworks */,
+				418B942C24E880090014101E /* AVCaptureView in Frameworks */,
 				41EDF29424E32E0800FFB199 /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -106,6 +108,9 @@
 			dependencies = (
 			);
 			name = MacVideoNinja;
+			packageProductDependencies = (
+				418B942B24E880090014101E /* AVCaptureView */,
+			);
 			productName = MacVideoNinja;
 			productReference = 41EDF27B24E1C7C600FFB199 /* MacVideoNinja.app */;
 			productType = "com.apple.product-type.application";
@@ -134,6 +139,9 @@
 				Base,
 			);
 			mainGroup = 41EDF27224E1C7C600FFB199;
+			packageReferences = (
+				418B942A24E880090014101E /* XCRemoteSwiftPackageReference "AVCaptureView" */,
+			);
 			productRefGroup = 41EDF27C24E1C7C600FFB199 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -359,6 +367,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		418B942A24E880090014101E /* XCRemoteSwiftPackageReference "AVCaptureView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/magesteve/AVCaptureView.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		418B942B24E880090014101E /* AVCaptureView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 418B942A24E880090014101E /* XCRemoteSwiftPackageReference "AVCaptureView" */;
+			productName = AVCaptureView;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 41EDF27324E1C7C600FFB199 /* Project object */;
 }
